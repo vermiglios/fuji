@@ -53,6 +53,7 @@ from fuji_server.evaluators.fair_evaluator_content_included import FAIREvaluator
 from fuji_server.evaluators.fair_evaluator_related_resources import FAIREvaluatorRelatedResources
 from fuji_server.evaluators.fair_evaluator_searchable import FAIREvaluatorSearchable
 from fuji_server.evaluators.fair_evaluator_file_format import FAIREvaluatorFileFormat
+from fuji_server.evaluators.fair_evaluator_test_rule import FAIREvaluatorTestRule
 from fuji_server.evaluators.fair_evaluator_data_provenance import FAIREvaluatorDataProvenance
 from fuji_server.evaluators.fair_evaluator_data_content_metadata import FAIREvaluatorDataContentMetadata
 from fuji_server.evaluators.fair_evaluator_formal_metadata import FAIREvaluatorFormalMetadata
@@ -554,6 +555,11 @@ class FAIRCheck:
         data_file_check.set_metric('FsF-R1.3-02D', metrics=FAIRCheck.METRICS)
         return data_file_check.getResult()
 
+    def check_test_rule_format(self):
+        test_rule_check = FAIREvaluatorTestRule(self)
+        test_rule_check.set_metric('FsF-F5-01D', metrics=FAIRCheck.METRICS)
+        return test_rule_check.getResult()
+
     def check_community_metadatastandards(self):
         community_metadata_check = FAIREvaluatorCommunityMetadata(self)
         community_metadata_check.set_metric('FsF-R1.3-01M', metrics=FAIRCheck.METRICS)
@@ -641,10 +647,14 @@ class FAIRCheck:
             'status': []
         }
         for res_k, res_v in enumerate(results):
+            print(res_v['metric_identifier'], flush=True)
             metric_match = re.search(r'^FsF-(([FAIR])[0-9](\.[0-9])?)-', res_v['metric_identifier'])
+            print(metric_match.group(2), flush=True)
             if metric_match.group(2) is not None:
                 fair_principle = metric_match[1]
                 fair_category = metric_match[2]
+                print(fair_principle, flush=True)
+                print(fair_category, flush=True)
                 earned_maturity = res_v['maturity']
                 #earned_maturity = [k for k, v in maturity_dict.items() if v == res_v['maturity']][0]
                 summary_dict['fair_category'].append(fair_category)

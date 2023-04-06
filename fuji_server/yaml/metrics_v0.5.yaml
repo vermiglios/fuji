@@ -445,3 +445,26 @@ metrics:
   date_updated: 2020-12-03
   version: 0.5
   total_score: 1
+
+- metric_identifier: FsF-F5-01D
+  metric_number: 18
+  metric_short_name: Test rule
+  metric_name: This is a test rule.
+  description: This is a test rule.
+  fair_principle: F5
+  target: Data
+  evaluation_mechanism: This is a test rule.
+  metric_tests:
+    - metric_test_identifier: FsF-F5-01D-1
+      metric_test_name: test
+      metric_test_score: 1
+      metric_test_maturity: 1
+    - metric_test_identifier: FsF-F5-01D-2
+      metric_test_name: test2
+      metric_test_score: 0
+      metric_test_maturity: 2
+  created_by: FAIRsFAIR
+  date_created: 2023-04-03
+  date_updated: 2023-04-03
+  version: 0.5
+  total_score: 1

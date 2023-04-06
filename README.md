@@ -102,6 +102,145 @@ docker build -t <tag_name> .
 docker run -d -p 1071:1071 <tag_name>
 ```
 
+### How to skip rules
+Just edit the file controllers/fair_object_controller.py
+
+* Comment out the following lines, for each rule to skip:
+
+    ```
+    #<rule_name>_result = ft.check_<rule_name>()
+  
+    #results.append(<rule_name>_result)
+    ```
+
+    In this code, as an example, I wanted to skip the license rule, commenting out the following lines:
+
+    ```
+    #licence_result = ft.check_licence()
+  
+    #results.append(licence_result)
+    ```
+### How to add custom rules
+
+This task requires much more steps than the previous one, let's see them below.
+
+* Put the definition of the new rule in the file yaml/metrics_v0.5.yaml. As an example, I inserted the definition of rule FsF-F5-01D
+with id equal to 18, with two practical tests with id FsF-F5-01D-1 and FsF-F5-01D-2. Metrics file used can be modified in server.ini file.
+
+    **Note:** The definition of the new rule should follow the FAIR principles. As a result, the second part of the rule name 
+    (in our example F5) should start with F or A or I or R. The last part of the rule name, instead, should end with D (Data), M (Metadata)
+    or MD (both).
+
+
+* Creation of three python files in models folder, for the definition of the rule. In particular, models/<rule_name>.py, 
+models/<rule_name>_output.py, models/<rule_name>_output_inner.py
+
+  * models/<rule_name>.py: file that contains the class definition of the rule, see models/test_rule.py as an example.
+  * models/<rule_name>_output.py: file that contains the class definition of the rule output, see models/test_rule_output.py as an example.
+  * models/<rule_name>_output_inner.py: file that contains the class definition of the rule output inner. In this class we can define
+  some custom methods for the outputs of the rule. As an example, see the method 'prova' in models/test_rule_output_inner.py file.
+
+
+* Put the implementation of the new rule in a new file called evalutators/fair_evalutator_<rule_name>.py. This class defines the implementation
+of the rule, in particular the set of actions that the rule should follow during the evaluation. A simple case, in which the two
+practical tests are passed without making any action is provided in evaluators/fair_evaluator_test_rule.py file.
+
+
+* Definition of a check method in controllers/fair_check.py file. As an example, I defined a method called `check_test_rule_format(self)`, in which
+there is the call to the method `FAIREvaluatorTestRule(self)` previously defined, that contains the implementation of our new custom rule.
+
+
+* Insert the following lines in controllers/fair_object_controller.py:
+
+    ```
+    <rule_name>_result = ft.check_<rule_name>()
+  
+    results.append(<rule_name>_result)
+    ```
+  As an example, I added my new rule:
+
+    ```
+   # check method defined in the previous step
+    test_rule_result = ft.check_test_rule_format()
+  
+    results.append(test_rule_result)
+    ```
+  
+* Finally, edit the swagger file defined in yaml/swagger.yaml
+
+  * In the structure FAIRResults/results/items/anyOf insert the following line: `- $ref: '#/components/schemas/<rule_name>'`.
+  For our new custom rule the following line has been added: `- $ref: '#/components/schemas/TestRule'`. The path '#/components/schemas'
+  refers to the fuji/models path.
+
+  * After the FAIRResultCommon/ structure insert the following lines:
+
+    ```
+    <rule_name>:
+      allOf:
+        - $ref: '#/components/schemas/FAIRResultCommon'
+        - type: object
+          properties:
+            output:
+              $ref: '#/components/schemas/<rule_name>_output'
+            test_debug:
+              $ref: '#/components/schemas/Debug'
+    ```
+
+    For our new custom rule the following lines have been added:
+
+    ```
+    TestRule:
+      allOf:
+        - $ref: '#/components/schemas/FAIRResultCommon'
+        - type: object
+          properties:
+            output:
+              $ref: '#/components/schemas/TestRule_output'
+            test_debug:
+              $ref: '#/components/schemas/Debug'
+    ```
+    
+  * After the FAIRResultCommon_score/ structure insert the following lines:
+
+    ```
+    <rule_name>_output:
+      type: array
+      items:
+        $ref: '#/components/schemas/<rule_name>_output_inner'
+    ```
+      You can also define some properties, if needed. Have a look at the other rules for some suggestions.
+
+      For our new custom rule the following lines have been added:
+
+    ```
+    TestRule_output:
+      type: array
+      items:
+        $ref: '#/components/schemas/TestRule_output_inner'
+    ```
+  * After the body/ structure insert the following lines:
+
+    ```
+    <rule_name>_output_inner:
+      type: object
+      properties:
+        <property_name>:
+          type: <type_name>
+    ```
+
+    In the properties field it is necessary to add the methods defined in the models/<rule_name>_output_inner.py file.
+
+    For our new custom rule, in which we had previously defined a method called 'prova' in the models/test_rule_output_inner.py
+    file, the following lines have been added: 
+
+    ```
+    TestRule_output_inner:
+      type: object
+      properties:
+        prova:
+          type: string
+    ```
+
 ### Notes
 
 To avoid tika startup warning message, set environment variable TIKA_LOG_PATH. For more information, see [https://github.com/chrismattmann/tika-python](https://github.com/chrismattmann/tika-python)

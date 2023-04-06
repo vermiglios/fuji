@@ -98,11 +98,15 @@ def assess_by_id(body):  # noqa: E501
         core_metadata_result = ft.check_minimal_metatadata()
         content_identifier_included_result = ft.check_content_identifier_included()
         access_level_result = ft.check_data_access_level()
-        license_result = ft.check_license()
+        #skip rule licence
+        #license_result = ft.check_license()
         related_resources_result = ft.check_relatedresources()
         check_searchable_result = ft.check_searchable()
         data_content_result = ft.check_data_content_metadata()
         data_file_format_result = ft.check_data_file_format()
+        # insert of custom rule
+        test_rule_result = ft.check_test_rule_format()
+        #
         community_standards_result = ft.check_community_metadatastandards()
         data_provenance_result = ft.check_data_provenance()
         formal_metadata_result = ft.check_formal_metadata()
@@ -121,10 +125,14 @@ def assess_by_id(body):  # noqa: E501
         results.append(semantic_vocab_result)
         results.append(related_resources_result)
         results.append(data_content_result)
-        results.append(license_result)
+        #skip rule licence
+        #results.append(license_result)
         results.append(data_provenance_result)
         results.append(community_standards_result)
         results.append(data_file_format_result)
+        # insert custom rule
+        results.append(test_rule_result)
+        #
         results.append(standard_protocol_data_result)
         results.append(standard_protocol_metadata_result)
         debug_messages = ft.get_log_messages_dict()

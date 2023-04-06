@@ -199,6 +199,7 @@ components:
             - $ref: '#/components/schemas/DataProvenance'
             - $ref: '#/components/schemas/CommunityEndorsedStandard'
             - $ref: '#/components/schemas/DataFileFormat'
+            - $ref: '#/components/schemas/TestRule'
             - $ref: '#/components/schemas/MetadataPreserved'
             - $ref: '#/components/schemas/StandardisedProtocolData'
             - $ref: '#/components/schemas/StandardisedProtocolMetadata'
@@ -324,6 +325,15 @@ components:
             $ref: '#/components/schemas/DataFileFormat_output'
           test_debug:
             $ref: '#/components/schemas/Debug'
+    TestRule:
+      allOf:
+        - $ref: '#/components/schemas/FAIRResultCommon'
+        - type: object
+          properties:
+            output:
+              $ref: '#/components/schemas/TestRule_output'
+            test_debug:
+              $ref: '#/components/schemas/Debug'
     DataProvenance:
       allOf:
       - $ref: '#/components/schemas/FAIRResultCommon'
@@ -529,6 +539,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/DataFileFormat_output_inner'
+    TestRule_output:
+      type: array
+      items:
+        $ref: '#/components/schemas/TestRule_output_inner'
     CommunityEndorsedStandard_output:
       type: array
       items:
@@ -707,6 +721,11 @@ components:
           type: array
           items:
             type: string
+    TestRule_output_inner:
+      type: object
+      properties:
+        prova:
+          type: string
     DataProvenance_output_inner:
       type: object
       properties:
