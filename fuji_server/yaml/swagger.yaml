@@ -42,6 +42,7 @@ paths:
               metadata_service_endpoint: http://ws.pangaea.de/oai/provider
               metadata_service_type: oai_pmh
               use_datacite: true
+              rule_skip_list: FsF-I2-01M,FsF-R1-01MD
       responses:
         "200":
           description: successful operation
@@ -660,6 +661,9 @@ components:
           deprecated: true
           type: string
           description: (Deprecated) The URL of the OAI-PMH data-provider
+        rule_skip_list:
+          type: string
+          description: List of rules to skip
     harvest:
       required:
       - object_identifier

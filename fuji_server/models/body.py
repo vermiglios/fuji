@@ -14,7 +14,7 @@ class Body(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, object_identifier: str=None, test_debug: bool=False, metadata_service_endpoint: str=None, metadata_service_type: str=None, use_datacite: bool=None, auth_token: str=None, auth_token_type: str=None, oaipmh_endpoint: str=None):  # noqa: E501
+    def __init__(self, object_identifier: str=None, test_debug: bool=False, metadata_service_endpoint: str=None, metadata_service_type: str=None, use_datacite: bool=None, auth_token: str=None, auth_token_type: str=None, oaipmh_endpoint: str=None, rule_skip_list: str=None):  # noqa: E501
         """Body - a model defined in Swagger
 
         :param object_identifier: The object_identifier of this Body.  # noqa: E501
@@ -42,7 +42,8 @@ class Body(Model):
             'use_datacite': bool,
             'auth_token': str,
             'auth_token_type': str,
-            'oaipmh_endpoint': str
+            'oaipmh_endpoint': str,
+            'rule_skip_list': str
         }
 
         self.attribute_map = {
@@ -53,7 +54,8 @@ class Body(Model):
             'use_datacite': 'use_datacite',
             'auth_token': 'auth_token',
             'auth_token_type': 'auth_token_type',
-            'oaipmh_endpoint': 'oaipmh_endpoint'
+            'oaipmh_endpoint': 'oaipmh_endpoint',
+            'rule_skip_list': 'rule_skip_list'
         }
         self._object_identifier = object_identifier
         self._test_debug = test_debug
@@ -63,6 +65,7 @@ class Body(Model):
         self._auth_token = auth_token
         self._auth_token_type = auth_token_type
         self._oaipmh_endpoint = oaipmh_endpoint
+        self._rule_skip_list = rule_skip_list
 
     @classmethod
     def from_dict(cls, dikt) -> 'Body':
@@ -264,3 +267,6 @@ class Body(Model):
         """
 
         self._oaipmh_endpoint = oaipmh_endpoint
+
+    def rule_skip_list(self) -> str:
+        return self._rule_skip_list
