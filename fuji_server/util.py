@@ -106,7 +106,10 @@ def deserialize_model(data, klass):
     """
     instance = klass()
 
-    if not instance.swagger_types:
+    try:
+        if not instance.swagger_types:
+            return data
+    except:
         return data
 
     for attr, attr_type in six.iteritems(instance.swagger_types):

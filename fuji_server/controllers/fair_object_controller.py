@@ -64,7 +64,6 @@ def assess_by_id(body):  # noqa: E501
         auth_token = body.auth_token
         auth_token_type = body.auth_token_type
         rule_skip_list = body.rule_skip_list
-        rule_skip_list = rule_skip_list.split(',')
         logger = Preprocessor.logger
         logger.info('Assessment target: ' + identifier)
         print('Assessment target: ', identifier, flush=True)
