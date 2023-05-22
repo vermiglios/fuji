@@ -141,6 +141,8 @@ def assess_by_id(body):  # noqa: E501
         result_dict["metadata_preserved_result"] = ft.check_metadata_preservation()
         result_dict["standard_protocol_data_result"] = ft.check_standardised_protocol_data()
         result_dict["standard_protocol_metadata_result"] = ft.check_standardised_protocol_metadata()
+        # insert of custom rule
+        result_dict["test_rule_result"] = ft.check_test_rule_format()
 
         ruleDTOList = []
         ruleDTOList.append(RuleDTO("FsF-F1-01D", "uid", False))
@@ -160,6 +162,7 @@ def assess_by_id(body):  # noqa: E501
         ruleDTOList.append(RuleDTO("FsF-R1.2-01M", "data_provenance", False))
         ruleDTOList.append(RuleDTO("FsF-R1.3-01M", "community_standards", False))
         ruleDTOList.append(RuleDTO("FsF-R1.3-02D", "data_file_format", False))
+        ruleDTOList.append(RuleDTO("FsF-F5-01D", "test_rule", False))
 
         for r in rule_skip_list:
             for ru in ruleDTOList:
