@@ -102,24 +102,15 @@ docker build -t <tag_name> .
 docker run -d -p 1071:1071 <tag_name>
 ```
 
-### How to skip rules
-Just edit the file controllers/fair_object_controller.py
+### How to run a simulation to the Swagger API
+Firstly, un the file fuji_server/__main__.py by modifying the Run/Debug parameters with "-c config/server.ini".
 
-* Comment out the following lines, for each rule to skip:
+Secondly, create the folder "examples/mass_assessment/results" if it does not exist; then run the script examples/mass_assessment/fuji_mass_eval_template.py
+by specifying the DOI/URL of the dataset you want to test (variable "pids") and the rules you want to exclude ("rule_skip_list" of the
+variable "base_request_dict").
 
-    ```
-    #<rule_name>_result = ft.check_<rule_name>()
-  
-    #results.append(<rule_name>_result)
-    ```
+The output will be a json file stored under the "results" folder. 
 
-    In this code, as an example, I wanted to skip the license rule, commenting out the following lines:
-
-    ```
-    #licence_result = ft.check_licence()
-  
-    #results.append(licence_result)
-    ```
 ### How to add custom rules
 
 This task requires much more steps than the previous one, let's see them below.
